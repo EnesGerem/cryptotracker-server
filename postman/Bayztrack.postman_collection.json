@@ -1,0 +1,292 @@
+{
+	"info": {
+		"_postman_id": "c6188c9e-2916-4086-b6bb-126c00dc25a8",
+		"name": "Bayztrack",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12723460"
+	},
+	"item": [
+		{
+			"name": "alert",
+			"item": [
+				{
+					"name": "Fetch alerts of a user",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/{{alertMapping}}/user/bayzat",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"{{alertMapping}}",
+								"user",
+								"bayzat"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create alert",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"currencySymbol\":\"BTC\",\n    \"targetPrice\":10000\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/{{alertMapping}}/create",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"{{alertMapping}}",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cancel alert",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/{{alertMapping}}/cancel/10003",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"{{alertMapping}}",
+								"cancel",
+								"10003"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Acknowledge alert",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/{{alertMapping}}/close/10007",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"{{alertMapping}}",
+								"close",
+								"10007"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get alert status",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/{{alertMapping}}/status/10003",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"{{alertMapping}}",
+								"status",
+								"10003"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "currency",
+			"item": [
+				{
+					"name": "Get enabled currencies",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/{{currencyMapping}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"{{currencyMapping}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Enable currency",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/{{currencyMapping}}/enable/ATOM",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"{{currencyMapping}}",
+								"enable",
+								"ATOM"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create currency",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"symbol\":\"TON\",\n    \"name\":\"Toncoin\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/currency/create",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"currency",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get enabled currency",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/{{currencyMapping}}/BTC",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"{{currencyMapping}}",
+								"BTC"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{bearer-token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"const getJWT = {",
+					"    url: `${pm.collectionVariables.get('baseURL')}/login`,",
+					"    method: 'POST',",
+					"    body: {",
+					"        mode: 'urlencoded',",
+					"        urlencoded: [",
+					"            {key: 'username', value: pm.collectionVariables.get('adminUsername')},",
+					"            {key: 'password', value: pm.collectionVariables.get('adminPassword')}",
+					"        ]",
+					"    }",
+					"}",
+					"",
+					"pm.sendRequest(getJWT, (err, res) => {",
+					"    if (err === null) pm.collectionVariables.set('bearer-token', `${res.json().access_token}`)",
+					"})",
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": "localhost:8080",
+			"type": "string"
+		},
+		{
+			"key": "currencyMapping",
+			"value": "currency",
+			"type": "string"
+		},
+		{
+			"key": "bearer-token",
+			"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJiYXl6YXQiLCJyb2xlcyI6WyJhbGVydDp3cml0ZSIsIlJPTEVfQURNSU4iLCJjdXJyZW5jeTp3cml0ZSIsImN1cnJlbmN5OnJlYWQiLCJhbGVydDpyZWFkIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC9sb2dpbiIsImV4cCI6MTY2NTE1ODUxMH0.ph64H1T-024Ep6AL4_KDB-YJ9YcwbIyQzKBvMuyYmDA",
+			"type": "string"
+		},
+		{
+			"key": "alertMapping",
+			"value": "alert",
+			"type": "string"
+		},
+		{
+			"key": "userMapping",
+			"value": "user",
+			"type": "string"
+		},
+		{
+			"key": "adminUsername",
+			"value": "bayzat",
+			"type": "string"
+		},
+		{
+			"key": "adminPassword",
+			"value": "password",
+			"type": "string"
+		}
+	]
+}

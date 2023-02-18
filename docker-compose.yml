@@ -1,0 +1,24 @@
+version: '2'
+
+services:
+  app:
+    image: 'cryptotracker:latest'
+    build:
+      context: .
+    ports:
+      - "8080:8080"
+    container_name: app
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/cryptotracker
+      - SPRING_DATASOURCE_USERNAME=cryptotracker
+      - SPRING_DATASOURCE_PASSWORD=password
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=create
+
+  db:
+    image: 'postgres:14.5-alpine'
+    container_name: db
+    environment:
+      - POSTGRES_USER=cryptotracker
+      - POSTGRES_PASSWORD=password
